@@ -2,11 +2,10 @@ import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 import { black } from '../utils/colors';
 
-export default AppTextInput = ({ style, placeholder, onChangeText }) => (
+export default AppTextInput = ({ style, ...props }) => (
   <TextInput
-    onChangeText={onChangeText}
+    {...props}
     style={[styles.input, style]}
-    placeholder={placeholder}
   />
 );
 

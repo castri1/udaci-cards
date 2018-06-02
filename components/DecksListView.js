@@ -1,29 +1,44 @@
 import React, { Component } from 'react';
 import { FlatList, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
 import DeckContainer from './DeckContainer';
+import { getDecks, clear } from '../utils/storage';
+import { loadDecks } from '../actions';
 
-const decks = [
-  { name: 'React', numberOfCards: 5 },
-  { name: 'Javascript', numberOfCards: 1 },
-  { name: 'Native', numberOfCards: null },
-];
-
-export default class DecksListView extends Component {
+class DecksListView extends Component {
   static navigationOptions = {
-    title: 'Decks',
+    title: 'Decks'
   };
 
+  componentWillMount() {
+    const { dispatch } = this.props;
+    getDecks()
+      .then(decks => {
+        dispatch(loadDecks(decks));
+      });
+  }
+
+  shouldComponentUpdate(props, nextState) {
+    return (props.decks.length !== this.props.decks.length)
+      || (props.totalQuestions !== this.props.totalQuestions);
+  }
+
+  onPress = (title) => {
+    this.props.navigation.navigate('DeckView', { title });
+  }
+
   render() {
+    const { decks } = this.props;
     return (
       <View style={styles.container}>
         <FlatList
           data={decks}
-          keyExtractor={(item, index) => item.name}
-          renderItem={({ item, index }) => <DeckContainer {...item} />}
+          keyExtractor={(item, index) => item.title}
+          renderItem={({ item, index }) => <DeckContainer onPress={() => this.onPress(item.title)} {...item} />}
         >
         </FlatList>
       </View>
-    )
+    );
   }
 }
 
@@ -41,3 +56,13 @@ const styles = StyleSheet.create({
     fontSize: 15
   }
 });
+
+function mapStateToProps(decks) {
+  const totalQuestions = decks.reduce((total, { questions }) => total + questions.length, 0);
+  return {
+    decks,
+    totalQuestions
+  };
+}
+
+export default connect(mapStateToProps)(DecksListView);

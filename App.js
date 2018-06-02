@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { createBottomTabNavigator } from 'react-navigation';
+import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 
 import DecksListView from './components/DecksListView';
 import DeckView from './components/DeckView';
 import NewDecksView from './components/NewDecksView';
 import NewQuestionView from './components/NewQuestionView';
+import QuizView from './components/QuizView';
+import reducer from './reducers';
 
+import { setLocalNotification } from './utils/helpers';
 
 export default class App extends Component {
+  componentDidMount() {
+    setLocalNotification()
+  }
+
   render() {
     return (
-      <DeckApp />
+      <Provider store={createStore(reducer)}>
+        <MainNavigator />
+      </Provider>
     );
   }
 }
@@ -33,10 +44,18 @@ const DeckApp = createBottomTabNavigator({
       }
       
       return <Ionicons name={iconName} size={25} color={tintColor} />;
-    },
+    }
   }),
   tabBarOptions: {
     activeTintColor: 'black',
     inactiveTintColor: 'gray',
   },
+});
+
+const MainNavigator = createStackNavigator({
+  Home: DeckApp,
+  DeckView: DeckView,
+  NewDecksView: NewDecksView,
+  NewQuestionView: NewQuestionView,
+  QuizView: QuizView
 });
