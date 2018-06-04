@@ -4,7 +4,8 @@ import { black, white, red, green } from '../utils/colors';
 
 class QuizView extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Quiz'
+    title: 'Quiz',
+    header: ''
   });
 
   state = {
@@ -151,6 +152,6 @@ const styles = StyleSheet.create({
     color: black,
     textAlign: 'center'
   }
-})
+});
 
 export default QuizView;

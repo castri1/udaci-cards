@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { FlatList, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { FlatList, View, Text, StyleSheet, TouchableOpacity, StatusBar, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import DeckContainer from './DeckContainer';
 import { getDecks, clear } from '../utils/storage';
 import { loadDecks } from '../actions';
+import { Constants } from 'expo';
 
 class DecksListView extends Component {
   static navigationOptions = {
-    title: 'Decks'
+    title: 'Decks',
+    header: null
   };
 
   componentWillMount() {
@@ -30,7 +32,11 @@ class DecksListView extends Component {
   render() {
     const { decks } = this.props;
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1 }}>
+        <StatusBar
+          backgroundColor={'#5E8D48'}
+          translucent
+        />
         <FlatList
           data={decks}
           keyExtractor={(item, index) => item.title}
@@ -41,21 +47,6 @@ class DecksListView extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  title: {
-    color: '#000',
-    fontSize: 20,
-    marginBottom: 15
-  },
-  cards: {
-    color: '#ccc',
-    fontSize: 15
-  }
-});
 
 function mapStateToProps(decks) {
   const totalQuestions = decks.reduce((total, { questions }) => total + questions.length, 0);

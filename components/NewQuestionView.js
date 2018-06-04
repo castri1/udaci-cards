@@ -11,7 +11,8 @@ class NewQuestionView extends Component {
   static navigationOptions = ({ navigation }) => {
     const title = navigation.getParam('title', 'Deck');
     return {
-      title
+      title,
+      header: ''
     };
   };
   

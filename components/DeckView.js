@@ -4,12 +4,13 @@ import AppButton from './AppButton';
 import { white, black, gray } from '../utils/colors';
 import { getDecks, clear } from '../utils/storage';
 import { connect } from 'react-redux';
-import { loadDeck, loadDecks } from '../actions'
-import { HeaderBackButton } from 'react-navigation';
+import { loadDeck, loadDecks } from '../actions';
+import { clearLocalNotification,  setLocalNotification } from '../utils/helpers';
 
 class DeckView extends Component {
   static navigationOptions = ({ navigation }) => ({
-      title: navigation.getParam('title', 'Deck')
+      title: navigation.getParam('title', 'Deck'),
+      header: ''
   });
 
   onAddCardPress = () => {
@@ -23,7 +24,8 @@ class DeckView extends Component {
       alert("Please add questions to this deck");
       return;
     }
-
+    clearLocalNotification()
+      .then(setLocalNotification)
     this.props.navigation.push('QuizView', { questions });
   }
 

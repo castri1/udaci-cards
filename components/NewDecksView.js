@@ -10,7 +10,8 @@ import { getDecks } from '../utils/storage'
 
 class NewDecksView extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'New Deck'
+    title: 'New Deck',
+    header: null
   });
 
   state = {
@@ -34,11 +35,10 @@ class NewDecksView extends Component {
           title,
           questions: []
         }));
-        this.props.navigation.navigate('Decks');
         this.setState({ title: '' });
+        this.props.navigation.navigate('DeckView', { title });
       })
       .catch(err => {
-        console.error(err);
         alert("Unable to save your deck");
       });
   }
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 40,
-    color: '#000',
+    color: black,
   }
 });
 
